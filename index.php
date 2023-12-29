@@ -1,11 +1,12 @@
 <?php
 
-require_once("../crud/bin/conexion/conexion.php");
-require_once("../crud/bin/persistencia/crud.php");
+require_once("../crud/bin/conexion/Conexion.php");
+require_once("../crud/bin/persistencia/Crud.php");
 
 
 
 $crud= new Crud("usuario") ;
+
 /*$crud->where("id",' =', 2)->update([
  "nombres" => "jian"
 ]);
