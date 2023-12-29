@@ -1,13 +1,24 @@
 <?php
 
-require_once("../crud/conexion/conexion.php");
+require_once("../crud/bin/conexion/conexion.php");
 require_once("../crud/bin/persistencia/crud.php");
 
 
 
 $crud= new Crud("usuario") ;
+/*$crud->where("id",' =', 2)->update([
+ "nombres" => "jian"
+]);
+*/
 
-$id = $crud->insert([
+$filasAfectadas = $crud->where("id",'=', 2)->update(["nombres" => "Jhon 2"]);
+
+$eliminados = $crud->where("id", '=', 3)->delete();
+
+echo "FILAS AFECTADAS: " . $filasAfectadas . " ELIMINADOS: " . $eliminados;
+
+//espacio
+/*$id = $crud->insert([
         "nombres" => "John",
         "apellidos" => "Smith",
         "edad" => 18,
@@ -16,8 +27,10 @@ $id = $crud->insert([
         "fecha_registro" => date("Y-m-d H:i:s")
             
 ]);
-echo "el id insetado es : " .$id ."\n";
+*/
+//echo "el id insetado es : " .$id ."\n";
+echo "\n";
 $lista= $crud->get();
-echo "</pre>";
+echo "<pre>";
 var_dump($lista);
 echo "</pre>";

@@ -45,6 +45,47 @@ class Crud{
         }
     }
 
+    public function update($obj) {
+        try {
+            $campos = "";
+            foreach ($obj as $llave => $valor) {
+                $campos .= "`$llave`=:$llave,"; //`nombres`=:nombres,`edad`=:edad
+            }
+            $campos = rtrim($campos, ",");
+            $this->sql = "UPDATE {$this->tabla} SET {$campos} {$this->wheres}";
+            $filasAfectadas = $this->ejecutar($obj);
+            return $filasAfectadas;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+
+    public function delete() {
+        try {
+            $this->sql = "DELETE FROM {$this->tabla} {$this->wheres}";
+            $filesAfectadas = $this->ejecutar();
+            return $filesAfectadas;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function where($llave, $condicion, $valor) {
+        $this->wheres .= (strpos($this->wheres, "WHERE")) ? " AND " : " WHERE ";
+        $this->wheres .= "`$llave` $condicion " . ((is_string($valor)) ? "\"$valor\"" : $valor) . " ";
+        return $this;
+    }
+
+
+    public function orWhere($llave, $condicion, $valor) {
+        $this->wheres .= (strpos($this->wheres, "WHERE")) ? " OR " : " WHERE ";
+        $this->wheres .= "`$llave` $condicion " . ((is_string($valor)) ? "\"$valor\"" : $valor) . " ";
+        return $this;
+    }
+
+
+
     private function ejecutar($obj = null) {
         $sth = $this->conexion->prepare($this->sql);
         if ($obj !== null) {
@@ -66,43 +107,11 @@ class Crud{
     }
 
 
-    public function update($obj) {
-        try {
-            $campos = "";
-            foreach ($obj as $llave => $valor) {
-                $campos .= "`$llave`=:$llave,"; //`nombres`=:nombres,`edad`=:edad
-            }
-            $campos = rtrim($campos, ",");
-            $this->sql = "UPDATE {$this->tabla} SET {$campos} {$this->wheres}";
-            $filasAfectadas = $this->ejecutar($obj);
-            return $filasAfectadas;
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
+   
+   
+   
 
-    public function delete() {
-        try {
-            $this->sql = "DELETE FROM {$this->tabla} {$this->wheres}";
-            $filesAfectadas = $this->ejecutar();
-            return $filesAfectadas;
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function where($llave, $condicion, $valor) {
-        $this->wheres .= (strpos($this->wheres, "WHERE")) ? " AND " : " WHERE ";
-        $this->wheres .= "`$llave` $condicion " . ((is_string($valor)) ? "\"$valor\"" : $valor) . " ";
-        return $this;
-    }
-
-    public function orWhere($llave, $condicion, $valor) {
-        $this->wheres .= (strpos($this->wheres, "WHERE")) ? " OR " : " WHERE ";
-        $this->wheres .= "`$llave` $condicion " . ((is_string($valor)) ? "\"$valor\"" : $valor) . " ";
-        return $this;
-    }
-
+    
    
 
 }
