@@ -1,22 +1,23 @@
 <?php
 
-class Crud{
+class Crud {
+
     protected $tabla;
     protected $conexion;
-    protected $wheres="";
-    protected $sql=null;
+    protected $wheres = "";
+    protected $sql = null;
 
-    public function __construct($tabla =null){
-        $this-> conexion =(new Conexion())->conectar();
-        $this->tabla=$tabla;
+    public function __construct($tabla = null) {
+        $this->conexion = (new Conexion())->conectar();
+        $this->tabla = $tabla;
     }
 
-    public function get(){
+    public function get() {
         try {
-           $this->sql= "SELECT * FROM {$this->tabla} {$this->wheres}";
-           $sth= $this -> conexion->prepare(($this->sql));
-           $sth->execute();
-          return $sth-> fetchAll(PDO::FETCH_OBJ);
+            $this->sql = "SELECT * FROM {$this->tabla} {$this->wheres}";
+            $sth = $this->conexion->prepare($this->sql);
+            $sth->execute();
+            return $sth->fetchAll(PDO::FETCH_OBJ);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -30,7 +31,6 @@ class Crud{
             return null;
         }
     }
-
 
     public function insert($obj) {
         try {
@@ -60,7 +60,6 @@ class Crud{
         }
     }
 
-
     public function delete() {
         try {
             $this->sql = "DELETE FROM {$this->tabla} {$this->wheres}";
@@ -77,14 +76,11 @@ class Crud{
         return $this;
     }
 
-
     public function orWhere($llave, $condicion, $valor) {
         $this->wheres .= (strpos($this->wheres, "WHERE")) ? " OR " : " WHERE ";
         $this->wheres .= "`$llave` $condicion " . ((is_string($valor)) ? "\"$valor\"" : $valor) . " ";
         return $this;
     }
-
-
 
     private function ejecutar($obj = null) {
         $sth = $this->conexion->prepare($this->sql);
@@ -106,15 +102,4 @@ class Crud{
         $this->sql = null;
     }
 
-
-   
-   
-   
-
-    
-   
-
 }
-
-
-
